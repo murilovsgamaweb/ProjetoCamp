@@ -11,7 +11,7 @@
           input-class="text-white"
           class="q-input--white"
           lazy-rules
-           :rules="[ val => val && val.length > 0 || 'Please type something']"
+           :rules="[ val => val && val.length > 0 || 'Insira seu email.']"
         />
       </div>
       <div class="col-md-4 col-sm-6 col-xs-10">
@@ -23,7 +23,7 @@
           input-class="text-white"
           class="q-input--white"
           lazy-rules
-           :rules="[ val => val && val.length > 0 || 'Please type something']"
+           :rules="[ val => val && val.length > 0 || 'Insira sua senha.']"
         />
         <q-btn class="full-width q-gutter-y-md" label="Login"
           color="primary"

@@ -60,7 +60,7 @@
         <q-select
           v-if="selectedMode === 'Seleções'"
           v-model="selectedContinent"
-          :options="Object.keys(selectionsData.seleções)"
+          :options="Object.keys(teamsData.selecoes)"
           label="Escolha um Continente"
           filled
           class="q-mb-md"
@@ -77,20 +77,14 @@
           multiple
         />
 
-        <!-- Exibição dos Times ou Seleções Selecionados -->
-        <q-card-section v-if="selectedMode === 'Times' && selectedTeam.length > 0">
-          <div class="text-h6">Times Selecionados:</div>
-          <ul>
-            <li v-for="team in selectedTeam" :key="team">{{ team }}</li>
-          </ul>
-        </q-card-section>
-
-        <q-card-section v-if="selectedMode === 'Seleções' && selectedSelection.length > 0">
-          <div class="text-h6">Seleções Selecionadas:</div>
-          <ul>
-            <li v-for="selection in selectedSelection" :key="selection">{{ selection }}</li>
-          </ul>
-        </q-card-section>
+        <!-- Campo de texto para exibir os Times ou Seleções Selecionados -->
+        <q-input
+          v-model="selectedItems"
+          filled
+          label="Times/Seleções Selecionados"
+          class="q-mb-md"
+          readonly
+        />
 
         <!-- Botões -->
         <q-btn type="submit" label="Criar" color="primary" class="full-width q-mb-md" />
@@ -101,38 +95,18 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
-// Estado do formulário
+// Importando o JSON da pasta composables
+import teamsData from '../composables/TimesESelecoes.json'
+
 const championshipName = ref('')
 const selectedMode = ref(null)
 const selectedLeague = ref(null)
 const selectedTeam = ref([])
 const selectedContinent = ref(null)
 const selectedSelection = ref([])
-
-// Dados do JSON
-const teamsData = {
-  times: {
-    Europeus: {
-      Inglaterra: ['Arsenal', 'Bournemouth', 'Brighton', 'Chelsea', 'Crystal Palace', 'Everton', 'Huddersfield', 'Leicester City', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle United', 'Southampton', 'Tottenham Hotspur', 'West Bromwich Albion', 'West Ham United'],
-      Espanha: ['Alavés', 'Athletic Club', 'Atlético de Madrid', 'Barcelona', 'Celta de Vigo', 'Deportivo La Coruña', 'Eibar', 'Espanyol', 'Getafe', 'Girona', 'Las Palmas', 'Leganés', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Valencia', 'Villarreal'],
-      Alemanha: ['Augsburg', 'Bayern de Munique', 'Bayer Leverkusen', 'Borussia Dortmund', 'Borussia Mönchengladbach', 'Eintracht Frankfurt', 'Freiburg', 'Hamburger SV', 'Hannover 96', 'Hoffenheim', 'Köln', 'Leipzig', 'Mainz', 'Schalke', 'Stuttgart', 'Wolfsburg'],
-      Itália: ['Atalanta', 'Bologna', 'Cagliari', 'Chievo Verona', 'Empoli', 'Fiorentina', 'Genoa', 'Inter de Milão', 'Juventus', 'Lazio', 'Milan', 'Napoli', 'Roma', 'Sampdoria', 'Sassuolo', 'Torino'],
-      França: ['Angers', 'Bordeaux', 'Caen', 'Dijon', 'Lille', 'Lyon', 'Marseille', 'Monaco', 'Montpellier', 'Nantes', 'Nice', 'Paris Saint-Germain', 'Rennes', 'Saint-Étienne', 'Toulouse'],
-      Outros: ['Celtic', 'Dinamo Zagreb', 'Red Bull Salzburg']
-    },
-    Brasileiros: ['Atlético Mineiro', 'Atlético Paranaense', 'Botafogo', 'Cruzeiro', 'Flamengo', 'Fluminense', 'Grêmio', 'Internacional', 'Palmeiras', 'Santos', 'São Paulo']
-  },
-  seleções: {
-    Américas: ['Argentina', 'Bolívia', 'Brasil', 'Chile', 'Colômbia', 'Costa Rica', 'Cuba', 'Equador', 'El Salvador', 'Estados Unidos', 'Guatemala', 'Honduras', 'México', 'Panamá', 'Paraguai', 'Peru', 'Uruguai', 'Venezuela'],
-    Europa: ['Alemanha', 'Andorra', 'Armenia', 'Áustria', 'Bélgica', 'Bósnia e Herzegovina', 'Bulgária', 'Chipre', 'Croácia', 'Dinamarca', 'Escócia', 'Eslováquia', 'Eslovênia', 'Espanha', 'Estônia', 'Finlândia', 'França', 'Geórgia', 'Grécia', 'Hungria', 'Islândia', 'Irlanda', 'Irlanda do Norte', 'Itália', 'Kazakhstan', 'Lituânia', 'Luxemburgo', 'Malta', 'Moldávia', 'Montenegro', 'Noruega', 'País de Gales', 'Polônia', 'Portugal', 'República Checa', 'Romênia', 'Rússia', 'San Marino', 'Suécia', 'Suíça', 'Turquia', 'Ucrânia'],
-    África: ['Argélia', 'Angola', 'Camarões', 'Costa do Marfim', 'Egito', 'Guiné', 'Marrocos', 'Mauritânia', 'Nigéria', 'Senegal', 'Togo'],
-    Ásia: ['Arábia Saudita', 'Austrália', 'China', 'Coreia do Norte', 'Coreia do Sul', 'Irã', 'Iraque', 'Jordânia', 'Japão', 'Oman', 'Qatar', 'Síria', 'Uzbequistão'],
-    Oceania: ['Nova Zelândia', 'Ilhas Salomão']
-  }
-}
 
 // Título vindo do card
 const cardTitle = ref('')
@@ -153,10 +127,13 @@ const getTeamsForSelectedLeague = computed(() => {
 
 const getSelectionsForSelectedContinent = computed(() => {
   if (selectedContinent.value) {
-    return teamsData.seleções[selectedContinent.value] || []
+    return teamsData.selecoes[selectedContinent.value] || []
   }
   return []
 })
+
+// Campo de texto que exibirá os itens selecionados
+const selectedItems = ref('')
 
 // Função para lidar com a mudança no seletor de modo
 const handleModeChange = () => {
@@ -185,27 +162,58 @@ const handleSubmit = () => {
   console.log('Continente:', selectedContinent.value)
   console.log('Seleções Selecionadas:', selectedSelection.value)
 }
+
+// Observa as mudanças nos times e seleções selecionados para atualizar o campo de texto
+watch([selectedTeam, selectedSelection], () => {
+  const items = selectedMode.value === 'Times' ? selectedTeam.value : selectedSelection.value
+  selectedItems.value = items.join(', ')
+})
 </script>
 
 <style scoped>
 .q-page {
   display: flex;
   align-items: center;
-  height: 100vh;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #1e2a35;
+  color: white;
 }
 
 .q-card {
-  background-color: #1e2a35;
+  background-color: #2a3b47;
   color: white;
-  border-radius: 8px;
-}
-
-.full-width {
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
   width: 100%;
 }
 
 .q-input, .q-select {
   background-color: #2e3b47;
   color: white;
+  border-radius: 8px;
+}
+
+.q-btn {
+  margin-top: 12px;
+  border-radius: 8px;
+  text-transform: uppercase;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.text-h6 {
+  font-weight: bold;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+li {
+  margin: 5px 0;
 }
 </style>

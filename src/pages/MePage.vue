@@ -57,19 +57,19 @@ const cards = [
   {
     img: '/images/fasegrupos.jpg',
     title: 'Fase de grupos + Mata-Mata',
-    text: 'Texto do card 1',
+    text: ' Nesse formato, as equipes se enfrentam em eliminatórias diretas. Quem perde é eliminado, e quem vence avança até a final.',
     mode: 'Times'
   },
   {
     img: '/images/pontos-corridos.png',
     title: 'Pontos corridos',
-    text: 'Texto do card 2',
+    text: 'odas as equipes se enfrentam em rodadas, acumulando pontos. A equipe com o maior número de pontos ao final de todas as rodadas é declarada campeã.',
     mode: 'Seleções'
   },
   {
     img: '/images/mata-mata.jpg',
     title: 'Mata-Mata',
-    text: 'Texto do card 3',
+    text: 'As equipes são inicialmente divididas em grupos, onde jogam entre si. As melhores classificadas avançam para a fase de mata-mata, onde o formato de eliminação direta define o campeão.',
     mode: 'Times'
   }
 ]

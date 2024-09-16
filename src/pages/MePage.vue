@@ -15,9 +15,10 @@
       </q-card>
 
       <!-- Cards com botão "Criar" -->
-      <div v-for="(card, index) in cards" :key="index" class="q-mt-md q-pa-md">
+      <div v-for="(card, index) in cards" :key="index" class="q-mt-md q-pa-md col-12 col-sm-6 col-md-4">
         <q-card class="my-card">
-          <img :src="card.img" />
+          <!-- Ajuste para a imagem ser responsiva e visível por completo -->
+          <img :src="card.img" alt="Imagem do card" class="card-image" />
 
           <q-card-section>
             <div class="text-h6">{{ card.title }}</div>
@@ -30,11 +31,10 @@
           <!-- Botão "Criar" -->
           <q-card-actions align="right">
             <q-btn
-            label="Criar"
-            color="primary"
-            @click="handleCreate(card.title)"
-            :to="{ name: 'criarCamp', query: { title: card.title } }"
-          />
+              label="Criar"
+              color="primary"
+              :to="{ name: 'criarCamp', query: { title: card.title } }"
+            />
           </q-card-actions>
         </q-card>
       </div>
@@ -55,29 +55,24 @@ const { user } = useAuthUser()
 // Lista de cards com informações
 const cards = [
   {
-    img: 'https://cdn.quasar.dev/img/mountains.jpg',
+    img: '/images/fasegrupos.jpg',
     title: 'Fase de grupos + Mata-Mata',
     text: 'Texto do card 1',
     mode: 'Times'
   },
   {
-    img: 'https://cdn.quasar.dev/img/mountains.jpg',
+    img: '/images/pontos-corridos.png',
     title: 'Pontos corridos',
     text: 'Texto do card 2',
     mode: 'Seleções'
   },
   {
-    img: 'https://cdn.quasar.dev/img/mountains.jpg',
+    img: '/images/mata-mata.jpg',
     title: 'Mata-Mata',
     text: 'Texto do card 3',
     mode: 'Times'
   }
 ]
-
-// Função que será chamada quando o botão "Criar" for clicado
-const handleCreate = (index) => {
-  console.log(`Botão "Criar" clicado no card ${index + 1}`)
-}
 </script>
 
 <style scoped>
@@ -107,6 +102,15 @@ const handleCreate = (index) => {
   border-radius: 8px;
 }
 
+/* Estilos para garantir que as imagens sejam visíveis por completo */
+.card-image {
+  width: 100%;
+  height: 200px; /* Altura fixa */
+  object-fit: contain; /* Garante que a imagem seja visível por completo */
+  border-radius: 8px 8px 0 0;
+}
+
+/* Tamanho do texto e espaçamento */
 p {
   color: #ccc;
 }

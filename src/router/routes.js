@@ -14,7 +14,8 @@ const routes = [
     path: '/app',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: 'me', name: 'me', component: () => import('src/pages/MePage.vue') }
+      { path: 'me', name: 'me', component: () => import('src/pages/MePage.vue') },
+      { path: 'criarCamp', name: 'criarCamp', component: () => import('src/pages/CriarCamp.vue') }
     ],
     meta: {
       requiresAuth: true

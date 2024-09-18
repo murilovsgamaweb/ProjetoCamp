@@ -143,26 +143,6 @@ const handleModeChange = () => {
   selectedSelection.value = []
 }
 
-// Função para lidar com a mudança na liga
-const handleLeagueChange = () => {
-  selectedTeam.value = []
-}
-
-// Função para lidar com a mudança no continente
-const handleContinentChange = () => {
-  selectedSelection.value = []
-}
-
-// Função para lidar com o envio do formulário
-const handleSubmit = () => {
-  console.log('Nome do Campeonato:', championshipName.value)
-  console.log('Modo:', selectedMode.value)
-  console.log('Liga:', selectedLeague.value)
-  console.log('Times Selecionados:', selectedTeam.value)
-  console.log('Continente:', selectedContinent.value)
-  console.log('Seleções Selecionadas:', selectedSelection.value)
-}
-
 // Observa as mudanças nos times e seleções selecionados para atualizar o campo de texto
 watch([selectedTeam, selectedSelection], () => {
   const items = selectedMode.value === 'Times' ? selectedTeam.value : selectedSelection.value
@@ -174,46 +154,39 @@ watch([selectedTeam, selectedSelection], () => {
 .q-page {
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background-color: #1e2a35;
-  color: white;
+  height: 100vh;
 }
 
 .q-card {
-  background-color: #2a3b47;
-  color: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  max-width: 500px;
-  width: 100%;
-}
-
-.q-input, .q-select {
-  background-color: #2e3b47;
+  background-color: #1e2a35;
   color: white;
   border-radius: 8px;
-}
-
-.q-btn {
-  margin-top: 12px;
-  border-radius: 8px;
-  text-transform: uppercase;
 }
 
 .full-width {
   width: 100%;
 }
 
-.text-h6 {
-  font-weight: bold;
+.q-input, .q-select {
+  background-color: #2e3b47;
+  color: white; /* Faz com que o texto digitado seja branco */
 }
 
-ul {
-  padding-left: 20px;
+.q-input__inner, .q-select__inner {
+  color: white !important; /* Garante que o texto interno seja branco */
 }
 
-li {
-  margin: 5px 0;
+.q-field__label {
+  color: white !important; /* Garante que o rótulo (label) seja branco */
+}
+
+/* Para as opções do q-select */
+.q-item__label {
+  color: white !important; /* Faz com que as opções do select sejam brancas */
+}
+
+/* Placeholder em branco */
+.q-placeholder {
+  color: white !important;
 }
 </style>
